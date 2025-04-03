@@ -1,6 +1,10 @@
 #include <SFML/Graphics.hpp>
-
+#include <sstream>
+#include <iostream>
 #include "Bat.h" //Bat.cpp bi chaliba
+
+#include "Ball.h"
+
 using namespace sf;
 
 int main()
@@ -14,8 +18,21 @@ int main()
 	window.setView(view);					// (left, top, width, height)
 	
 	Bat bat(1920/2,1080-20);
-	
+	Ball ball(1920/2 - 20,0);
+
 	Clock clock;
+	
+	int score = 0;
+	int lives = 3;
+	
+	Text messageText;
+	Font font;
+	font.loadFromFile("font/DIGII.TTF");
+	
+	messageText.setFont(font);
+	messageText.setCharacterSize(36);
+	messageText.setFillColor(Color::White);
+	messageText.setPosition(20,20);
 	
 	//gaming loop
 	while (window.isOpen())
@@ -57,8 +74,15 @@ int main()
 		Time dt=clock.restart();
 		
 		bat.update(dt);
-	
+		ball.update(dt);
+		
+		std::stringstream ss; //used to make text string dynamically
+		ss << "Score:" << score << "\nLives:" << lives ;
+		messageText.setString(ss.str());
+		
 		window.clear();
+		window.draw(messageText);
+		window.draw(ball.getShape());
 		window.draw(bat.getShape());
 		window.display();
 		 

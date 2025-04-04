@@ -33,7 +33,7 @@ void Ball::reboundBottom()
 {
 	m_Position.x = 1920/2 - 20;
 	m_Position.y=0;
-	m_directionY = -m_directionY; //reverse vertical direction
+	//m_directionY = -m_directionY; //reverse vertical direction
 }
 
 void Ball::update(Time dt)

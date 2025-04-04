@@ -26,6 +26,7 @@ int main()
 	int lives = 3;
 	
 	Text messageText;
+	Text GAMEOVER;
 	Font font;
 	font.loadFromFile("font/DIGII.TTF");
 	
@@ -33,6 +34,13 @@ int main()
 	messageText.setCharacterSize(36);
 	messageText.setFillColor(Color::White);
 	messageText.setPosition(20,20);
+	GAMEOVER.setFont(font);
+	GAMEOVER.setString("GAME OVER!!!");
+	GAMEOVER.setFillColor(Color::Red);
+	GAMEOVER.setCharacterSize(130);
+	FloatRect textRect = GAMEOVER.getLocalBounds();
+     GAMEOVER.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	GAMEOVER.setPosition(960, 540);
 	
 	//gaming loop
 	while (window.isOpen())
@@ -69,6 +77,35 @@ int main()
 		else
 		{
 			bat.stopLeft();
+		}
+		//collision detectionn
+		if(ball.getPosition().left < 0 || ball.getPosition().left + 2*20 > 1920)
+		{
+			ball.reboundSides();
+		}
+		
+		if(ball.getPosition().top < 0)
+		{
+			ball.reboundBatOrTop();
+			score++;
+		}
+		
+		if (ball.getPosition().intersects(bat.getPosition()))
+		{
+		    ball.reboundBatOrTop();
+
+		}
+		
+		if (ball.getPosition().top + 40 > 1080)
+		{
+			ball.reboundBottom();
+			lives--;
+			if(lives<1)
+			{
+				std::cout << "GAME OVER!!!" << std::endl;
+				score = 0;
+				lives = 3;
+			}
 		}
 		
 		Time dt=clock.restart();

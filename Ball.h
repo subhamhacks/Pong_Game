@@ -9,7 +9,7 @@ private:
 	
 	CircleShape m_Shape; //graphical representation of Ball
 	
-	float m_Speed=1000.0;//controls ball speed(pixel/sec)
+	float m_Speed=2000.0;//controls ball speed(pixel/sec)
 	
 	float m_directionX=0.2;//ball moves left & right
 	float m_directionY=0.2;//ball moves downwards

@@ -22,26 +22,21 @@ int main()
 
 	Clock clock;
 	
+	bool paused = false;
 	int score = 0;
 	int lives = 3;
 	
 	Text messageText;
 	Text GAMEOVER;
-	Font font;
+	Font font,font1;
 	font.loadFromFile("font/DIGII.TTF");
-	
+	font1.loadFromFile("font/KOMIKAP_.ttf");
 	messageText.setFont(font);
 	messageText.setCharacterSize(36);
 	messageText.setFillColor(Color::White);
 	messageText.setPosition(20,20);
-	GAMEOVER.setFont(font);
-	GAMEOVER.setString("GAME OVER!!!");
-	GAMEOVER.setFillColor(Color::Red);
 	GAMEOVER.setCharacterSize(130);
-	FloatRect textRect = GAMEOVER.getLocalBounds();
-     GAMEOVER.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	GAMEOVER.setPosition(960, 540);
-	
+	GAMEOVER.setFont(font1);
 	//gaming loop
 	while (window.isOpen())
 	{
@@ -55,12 +50,24 @@ int main()
 			}	
 			
 		} 
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+		{									
+			window.close();							  
+		} 
 
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) 
 		{									
 			window.close();							  
 		} 
+
 		
+	if (!paused)
+	{
+	
+		if (Keyboard::isKeyPressed(Keyboard::Return)) 
+		{											 
+			paused = true;							  
+		} 
 		if (Keyboard::isKeyPressed(Keyboard::Right)) 
 		{									
 			bat.moveRight();		  
@@ -105,6 +112,12 @@ int main()
 				std::cout << "GAME OVER!!!" << std::endl;
 				score = 0;
 				lives = 3;
+				paused=true;
+				GAMEOVER.setString("GAME OVER!!!");
+				GAMEOVER.setFillColor(Color::Red);
+				FloatRect textRect = GAMEOVER.getLocalBounds();
+				GAMEOVER.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+				GAMEOVER.setPosition(960, 540);
 			}
 		}
 		
@@ -116,11 +129,29 @@ int main()
 		std::stringstream ss; //used to make text string dynamically
 		ss << "Score:" << score << "\nLives:" << lives ;
 		messageText.setString(ss.str());
-		
+		}
+		else{
+			GAMEOVER.setFillColor(Color::Red);
+			if (Keyboard::isKeyPressed(Keyboard::Return)) 
+			{								
+				ball.reboundBottom();
+				GAMEOVER.setFillColor(Color::Transparent);			 
+				paused = false;		
+				GAMEOVER.setString("PAUSED!!");
+				FloatRect textRect = GAMEOVER.getLocalBounds();
+				GAMEOVER.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+				GAMEOVER.setPosition(960, 540);					  
+			} 
+		}
+			
+	
 		window.clear();
 		window.draw(messageText);
 		window.draw(ball.getShape());
 		window.draw(bat.getShape());
+		
+			window.draw(GAMEOVER);
+		
 		window.display();
 		 
 	}	
